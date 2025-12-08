@@ -46,6 +46,17 @@ describe('ApiService', () => {
             const req = httpTestingController.expectOne('http://localhost:3004/tags');
             req.flush({ id: '1', name: 'foo'});
             expect(tag).toEqual({id: '1', name: 'foo'})
+        });
+
+        it('passes the correct body', () => {
+            let tag: TagInterface | undefined;
+            apiService.createTag('foo').subscribe(response => {
+                tag = response;
+            });
+            const req = httpTestingController.expectOne('http://localhost:3004/tags');
+            req.flush({ id: '1', name: 'foo'});
+            expect(req.request.method).toEqual('POST');
+            expect(req.request.body).toEqual({name: 'foo'});
         })
     })
 })
